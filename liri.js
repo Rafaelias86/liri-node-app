@@ -1,63 +1,58 @@
 //Read and set any environment variables with the dotenv package
 require("dotenv").config();
+// fs is a core Node package for reading and writing files
+const fs = require("fs")
 
-let axios = require("axios");
+const axios = require("axios");
 
-let Spotify = require('node-spotify-api');
+const moment = require('moment')
 
-let keys = require("./keys.js");
+const Spotify = require('node-spotify-api');
 
-let spotify = new Spotify(keys.spotify);
+const keys = require("./keys.js");
+
+const spotify = new Spotify(keys.spotify);
 
 let action = process.argv[2];
+let userQuery = process.argv.slice(3).join(" ");
 
-// We will then create a switch-case statement (if-else would also work).
+ function userCommand(action, userQuery){
+    // We will then create a switch-case statement (if-else would also work).
 // The switch-case will direct which function gets run.
 switch (action) {
-    case "movie-this":
-      movie();
-      break;
-    
-    case "spotify-this-song":
-      song();
-      break;
-    
-    case "concert-this":
-      concert();
-      break;
-    
-    case "do-what-it-says":
-      says();
-      break;
-    }
-
-function movie(){
-    // Store all of the arguments in an array
-var nodeArgs = process.argv;
-
-// Create an empty variable for holding the movie name
-var movieName = "";
-
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
-for (var i = 3; i < nodeArgs.length; i++) {
-
-  if (i > 3 && i < nodeArgs.length) {
-    movieName = movieName + "+" + nodeArgs[i];
-  } else {
-    movieName += nodeArgs[i];
-
+  case "movie-this":
+    movie();
+    break;
+  
+  case "spotify-this-song":
+    song();
+    break;
+  
+  case "concert-this":
+    concert();
+    break;
+  
+  case "do-what-it-says":
+    says(userQuery);
+    break;
   }
+
 }
 
-// Then run a request with axios to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+userCommand(action, userQuery);
 
-// This line is just to help us debug against the actual URL.
-//console.log(queryUrl);
+function movie(){
+//If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+  if (!userQuery) {
+    userQuery = "mr nobody"
+  };
+
+// Run a request with axios to the OMDB API with the movie specified
+var queryUrl = "http://www.omdbapi.com/?t=" + userQuery + "&y=&plot=short&apikey=trilogy";
 
 axios.get(queryUrl).then(
   function(response) {
+    console.log("\n =========== Search Result ===========\n ");
     console.log("Title: " + response.data.Title);
     console.log("Release Year: " + response.data.Year);
     console.log("IMDB Rating: " + response.data.Ratings[0].Value);
@@ -89,38 +84,58 @@ axios.get(queryUrl).then(
     console.log(error.config);
   });
 
-}
+};
 
 function song(){
-// Store all of the arguments in an array
-var nodeArgs = process.argv;
+  //If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+  if (!userQuery) {
+    userQuery = "the sign ace of base"
+  };
 
-// Create an empty variable for holding the movie name
-var songName = "";
-
-
-
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
-for (var i = 3; i < nodeArgs.length; i++) {
-
-    if (i > 3 && i < nodeArgs.length) {
-    songName = songName + "+" + nodeArgs[i];
-    } else {
-    songName += nodeArgs[i];
-
-    }
-}
-spotify.request('https://api.spotify.com/v1/search?q=track:' + songName + '&type=track&limit=1', function(error, response) {
+// // Spotify search query format
+spotify.request('https://api.spotify.com/v1/search?q=track:' + userQuery + '&type=track&limit=1', function(error, response) {
         if (error){
             return console.log(error);
         }
        //console.log(JSON.stringify(response, null, 2));
+        console.log("\n =========== Search Result ===========\n ");
         console.log("Artist: " + response.tracks.items[0].artists[0].name);
         console.log("Song: " + response.tracks.items[0].name);
         console.log("URL: " + response.tracks.items[0].preview_url);
         console.log("Album: " + response.tracks.items[0].album.name);
     });
 
-}
+};
+
+function concert(){
+
+var queryUrl = "https://rest.bandsintown.com/artists/" + userQuery + "/events?app_id=codingbootcamp";
+
+axios.get(queryUrl).then(
+  function(response){
+    //console.log(response);
+    console.log("\n =========== Search Result ===========\n ")
+    console.log("Venue: " + response.data[0].venue.name);
+    console.log("City: " + response.data[0].venue.city);
+    //console.log(moment("Date: " + response.data[0].datetime).format("YYYY-MM-DD"));
+    let eventDate = moment(response.data[0].datetime).format("MM/DD/YYYY");
+    console.log('Date: ' + eventDate)
+  });
+
+};
+
+function says(){
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(error);
+    }
+      let output = data.split(",");
+
+      action = output[0];
+      userQuery = output[1];
+        
+      userCommand(action, userQuery);
+    });
+};
+
 

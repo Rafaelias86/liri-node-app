@@ -71,7 +71,7 @@ node liri.js do-what-it-says
 
 LIRI will use the text from “random.txt” and call on of LIRI’s commands. It should run Spotify-this-song for “I want it That way”. 
 
-![Screenshot](/images/do-waht-it-says.png)
+![Screenshot](/images/do-what-it-says.png)
 
 ## Technologies used:
 

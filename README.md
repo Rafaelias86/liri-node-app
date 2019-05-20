@@ -19,11 +19,11 @@ Liri is a command line application that takes user commands and queries from the
 ### Functionality
 --- 
 1. concert-this
-By running 
+ By running 
 
-node liri.js concert-this <band>
+ node liri.js concert-this <band>
 
-This will search the Bands in Town Artist Events API for an artist and returns the next concert time and date for that artist, as well as location and city.
+ This will search the Bands in Town Artist Events API for an artist and returns the next concert time and date for that artist, as well   as location and city.
 
 -	Name of the venue
 -	Venue location
@@ -32,11 +32,11 @@ This will search the Bands in Town Artist Events API for an artist and returns t
 ![Screenshot](/images/concert-this.png)
 
 2. spotify-this-song
-By running
+ By running
 
-node liri.js spotify-this-song <song>
+ node liri.js spotify-this-song <song>
 
-This will search for the user input and returns the artist, full track name, album and a preview link.
+ This will search for the user input and returns the artist, full track name, album and a preview link.
 
 -	Artist(s)
 -	The song's name
@@ -46,11 +46,11 @@ This will search for the user input and returns the artist, full track name, alb
 ![Screenshot](/images/spotify-this-song.png)
 
 3. movie-this
-By running
+ By running
 
-node liri.js movie-this <movie>
+ node liri.js movie-this <movie>
 
-Function takes the user input and it will output the following information to your terminal/bash window:
+ Function takes the user input and it will output the following information to your terminal/bash window:
 
 - Title of the movie.
 - Year the movie came out.
@@ -64,12 +64,12 @@ Function takes the user input and it will output the following information to yo
 ![Screenshot](/images/movie-this.png)
 
 4. do-what-it-says
-By running
+ By running
 
-node liri.js do-what-it-says
+ node liri.js do-what-it-says
 
 
-LIRI will use the text from “random.txt” and call on of LIRI’s commands. It should run Spotify-this-song for “I want it That way”. 
+ LIRI will use the text from “random.txt” and call on of LIRI’s commands. It should run Spotify-this-song for “I want it That way”. 
 
 ![Screenshot](/images/do-what-it-says.png)
 
